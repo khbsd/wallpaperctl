@@ -34,13 +34,13 @@ do
 done
 
 # safety check in case $wallmod is still out of scope
-if [ $new_wall -gt $wallpaper_amount ] || [ $new_wall -lt $(($wallpaper_amount * -1)) ]; then
+if [ $new_wall -gt $(($wallpaper_amount - 1)) ] || [ $new_wall -lt $(($wallpaper_amount * -1)) ]; then
 	new_wall=0
 	echo "wallpaper adjustment out of bounds, setting back to 0"
 fi
 
 # write wallpaper index to storage file    
-echo $new_wall > ./cur_wall.num
+echo $new_wall > $HOME/cur_wall.num
 #echo ${new_wall}
 
 # use swww to set new wallpaper
