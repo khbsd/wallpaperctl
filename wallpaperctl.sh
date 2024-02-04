@@ -13,6 +13,7 @@ current_wallpaper="cur_wall.num"
 wallmod=$1
 safe_mod=2
 
+# check for stored wallpaper index
 if [ ! -f "$current_wallpaper" ]; then
     echo "no current wallpaper, starting from first image."
     value=0
@@ -21,6 +22,7 @@ else
     new_wall=$(($value + $wallmod))
 fi
 
+# overflow check for incrementing and decrementing by 1
 while [ $safe_mod -gt 0 ]
 do
     if [ $new_wall -gt $wallpaper_amount ]; then
@@ -30,10 +32,16 @@ do
     
     safe_mod=$(($safe_mod - 1))
 done
-    
-echo $new_wall > ./cur_wall.num
-echo ${new_wall}
 
+# safety check in case $wallmod is still out of scope
+if [ $new_wall -gt $wallpaper_amount ] || [$new_wall -lt $(($wallpaper_amount * -1))]; then
+	new_wall=0
+
+# write wallpaper index to storage file    
+echo $new_wall > ./cur_wall.num
+#echo ${new_wall}
+
+# use swww to set new wallpaper
 swww img ${wallpaper_folder[$new_wall]}
 
 
